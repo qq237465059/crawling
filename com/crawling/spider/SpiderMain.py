@@ -37,12 +37,15 @@ class SpiderMain(object):
                 # 执行HTML下载器
                 html_content = self.download.DownLoad(new_url)
                 # 调用解析器解析
-                new_data = self.parser.getAllType(html_content)
+                new_data = self.parser.getAllType(new_url, html_content)
+                for type in new_data:
+                    type_html = self.download.DownLoad(type["url"])
+                    data, urls = self.parser.findBookByType(type_html, type["type"])
                 # new_data = self.parser.Parse(new_url, html_content)
                 # 将URL添加到URL管理器
-                # self.urls.add_new_urls(new_urls)
+                self.urls.add_new_urls(urls)
                 # 将数据放到output中存放
-                self.output.collect_data(new_data)
+                # self.output.collect_data(new_data)
 
                 # 不能一直爬取  可以自己设置一个爬取的上限
                 if count > 999:

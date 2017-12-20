@@ -4,8 +4,8 @@ HTML下载器
 下载HTML
 @author: HY
 """
-from bs4 import BeautifulSoup
 from selenium import webdriver
+import time
 
 
 class HtmlDownLoad(object):

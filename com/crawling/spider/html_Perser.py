@@ -7,6 +7,7 @@ import re
 from bs4 import BeautifulSoup
 from com.crawling.spider.html_DownLoad import HtmlDownLoad
 
+
 class HtmlPerser(object):
 
     # url补全
@@ -54,7 +55,7 @@ class HtmlPerser(object):
         # 返回获取出来的数据
         return data
 
-    def getAllType(self, root_url,root_html):
+    def getAllType(self, root_url, root_html):
         data = []
         soup = BeautifulSoup(root_html, "html.parser")
         tr = soup.select('div.nav')
@@ -62,9 +63,75 @@ class HtmlPerser(object):
         for li in liList:
             if li.text == "网站首页":
                 continue
-            print(li.get("href"))
-            type["name"] = li.text
-            type["url"] = li.get("href")
+            type = {}
+            type["type"] = li.text
+            type["url"] = root_url + li.get("href")
             data.append(type)
-        print(data)
-        return type
+        return data
+
+    def findBookByType(self, type_html, type):
+        soup = BeautifulSoup(type_html, "html.parser")
+        items = soup.select("div#hotcontent div.ll div.item")
+        data = []
+        urls = []
+        for item in items:
+            book = {}
+            book["author"] = item.select_one(" dl dt span").text
+            book["source"] = item.select_one(" dl dt a").get("href")
+            book["bookName"] = item.select_one("div.image a img").get("alt")
+            book["type"] = type
+            data.append(book)
+            urls.append(book["source"])
+
+        lis = soup.select("div#newscontent li")
+        for li in lis:
+            book = {}
+            book["author"] = li.select_one("span.s5").text
+            book["source"] = li.select_one("span.s2 a").get("href")
+            book["bookName"] = li.select_one("span.s2 a").text
+            book["type"] = type
+            data.append(book)
+            urls.append(book["source"])
+        return data, urls
+
+    def findBookChapter(self, root_url, book_content, bookId):
+        soup = BeautifulSoup(book_content, "html.parser")
+        links = soup.select("div#list dd a")
+        data = []
+        for a in links:
+            chapter = {}
+            chapter["url"] = root_url + a.get("href")
+            book = a.text.split(" ")
+            chapter["chapter"] = book[0]
+            chapter["title"] = book[1]
+            chapter["bookId"] = bookId
+            data.append(chapter)
+        return data
+
+    def getBookOneUrl(self, book_content):
+        soup = BeautifulSoup(book_content, "html.parser")
+        return soup.select_one("div#list dd a").get("href")
+
+    def getBookName(self, html):
+        soup = BeautifulSoup(html, "html.parser")
+        return soup.select_one("div#info h1").text
+
+    def getChapterContent(self, one_url, root_url, html):
+        soup = BeautifulSoup(html, "html.parser")
+        book_text = soup.select_one("div.box_con div.bookname h1").text
+        book_info = str(book_text).strip().split(' ', 1)
+        chapter = {}
+        if book_info.__len__() > 1:
+            chapter["chapter"] = book_info[0]
+            chapter["title"] = book_info[1]
+        else:
+            chapter["chapter"] = book_info
+            chapter["title"] = book_info
+        chapter["content"] = soup.select_one("div#content").text
+        chapter["url"] = one_url
+        # 获取下一章URL
+        links = soup.select("div.bookname div.bottem1 a")
+        length = links.__len__()
+        if links[length - 2].get("href") == links[length - 3].get("href"):
+            return None, None
+        return root_url + links[length - 2].get("href"), chapter

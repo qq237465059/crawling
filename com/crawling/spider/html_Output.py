@@ -19,16 +19,6 @@ class HtmlOutPut(object):
         self.datas.append(data)
 
     # 用于将收集到的数据放到HTml页面中
-    def output_html(self, typeid, id):
+    def output_html(self):
 
-        sql = u"insert into `new`(typeid,newname,pdfpath,newDate) values"
-        strsql = u""
-        for data in self.datas:
-            for da in data:
-                strsql = strsql + u"(%s,'%s','%s',%s)," % (
-                typeid, da['title'].encode('utf-8'), da['url'].encode('utf-8'), id)
-        sql = sql + strsql[:-1]
-        print(sql)
         print("-------------------------------------")
-        # mysqldb=Mysqldb.putMySqlDb.putMySqlDb()
-        # mysqldb.addNew(sql)
