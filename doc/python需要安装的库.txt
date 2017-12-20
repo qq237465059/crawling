@@ -1,0 +1,6 @@
+pip install django
+pip install bs4
+pip install selenium
+pip install pymongo
+pip install pymysql
+pip install configparser
