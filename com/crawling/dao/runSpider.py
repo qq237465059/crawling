@@ -6,6 +6,7 @@ from com.crawling.spider import html_Perser
 from com.crawling.spider import html_Output
 from com.crawling.database.SqlHelper import SqlHelper
 
+
 class RunSpider:
     def __init__(self):
         # 初始化URL管理器
