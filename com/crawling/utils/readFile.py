@@ -10,8 +10,7 @@ class ReadFile:
     @staticmethod
     def readFile():
         config = {}
-        print(sys.path)
-        file_path = sys.path[1]
+        file_path = sys.path[sys.path.__len__()-2]
         print(file_path)
         os.chdir(file_path+"/com/")
         cf = configparser.ConfigParser()
