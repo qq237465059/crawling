@@ -4,11 +4,13 @@ import configparser
 import os
 import sys
 
+
 class ReadFile:
 
     @staticmethod
     def readFile():
         config = {}
+        print(sys.path)
         file_path = sys.path[1]
         print(file_path)
         os.chdir(file_path+"/com/")
