@@ -138,3 +138,18 @@ class HtmlPerser(object):
         if links[length - 2].get("href") == links[length - 3].get("href"):
             return None, None
         return root_url + links[length - 2].get("href"), chapter
+
+
+    def addBookByContent(self, html):
+        soup = BeautifulSoup(html, "html.parser")
+        book_text = soup.select_one("div.box_con div.bookname h1").text
+        book_info = str(book_text).strip().split(' ', 1)
+        chapter = {}
+        if book_info.__len__() > 1:
+            chapter["chapter"] = book_info[0]
+            chapter["title"] = book_info[1]
+        else:
+            chapter["chapter"] = book_info
+            chapter["title"] = book_info
+        chapter["content"] = soup.select_one("div#content").text
+        return chapter

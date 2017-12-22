@@ -5,6 +5,7 @@ from com.crawling.spider import html_DownLoad
 from com.crawling.spider import html_Perser
 from com.crawling.spider import html_Output
 from com.crawling.database.SqlHelper import SqlHelper
+import time
 
 import sys
 reload(sys)
@@ -56,11 +57,14 @@ class RunSpider:
                         bookId = int(self.db.sqlQuery("select id from book_info where bookName = '%s' " % (bookName))[0][0])
                         # 获取第一章
                         one_url = self.parser.getBookOneUrl(book_html_content)
+                        one_url = root_url + one_url
                         # 获取最后一章
                         chapter_url = self.db.sqlQuery("select url from book_article where bookId = %d" % bookId)
                         if len(chapter_url) > 0:
                             one_url = chapter_url[0][0]
-                        self.getBookByOne(root_url+one_url, root_url, bookId)
+                        # 拿到页面数据
+                        one_html_content = self.download.DownLoad(one_url)
+                        self.getBookByOne(one_html_content, bookId)
 
                     # 如果没有URL,那么就在控制台打印出
                     except Exception as e:
@@ -70,15 +74,24 @@ class RunSpider:
         # 关闭浏览器
         self.download.closeBrowser()
 
-    def getBookByOne(self, one_url, root_url, bookId):
-        # 从第一章开始获取内容
-        print("URL为："+one_url)
-        one_html_content = self.download.DownLoad(one_url)
-        url, chapter = self.parser.getChapterContent(one_url, root_url, one_html_content)
+    def getBookByOne(self, one_html_content, bookId):
+        # 获取 “下一章” 按钮
+        driver = self.download.getBrowser()
+        print("当前链接为：" + driver.current_url)
+        try:
+            nextBtn = driver.find_element("link text", "下一章")
+        except Exception as e:
+            nextBtn = None
+        # 解析网页
+        chapter = self.parser.addBookByContent(one_html_content)
         if chapter is not None:
             chapter["bookId"] = int(bookId)
+            chapter["url"] = driver.current_url
             self.db.insertByTable("book_article", chapter)
-        if url is not None:
-            self.getBookByOne(url, root_url, bookId)
+        if nextBtn is not None:
+            nextBtn.click()
+            time.sleep(1)
+            print(driver.title)
+            self.getBookByOne(driver.page_source, bookId)
         return
 
