@@ -78,8 +78,3 @@ class RunSpider:
             self.getBookByOne(url, root_url, bookId)
         return
 
-
-if __name__ == "__main__":
-    s = RunSpider()
-    url = "http://www.biquge.com.tw/"
-    s.run(url)

@@ -5,13 +5,13 @@ HTML下载器
 @author: HY
 """
 from selenium import webdriver
-import time
-
+from com.crawling.utils.readFile import  ReadFile
 
 class HtmlDownLoad(object):
 
     def __init__(self):
-        self.driver = webdriver.PhantomJS(executable_path="E:\\phantomjs\\bin\\phantomjs.exe")
+        config = ReadFile().readFile()
+        self.driver = webdriver.PhantomJS(executable_path=config["path"])
 
     # 实现页面的下载
     def DownLoad(self, url):
