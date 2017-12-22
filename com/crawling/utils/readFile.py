@@ -3,6 +3,8 @@
 import configparser
 import os
 import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 class ReadFile:
@@ -11,7 +13,7 @@ class ReadFile:
     def readFile():
         config = {}
         file_path = sys.path[sys.path.__len__()-2]
-        # file_path = sys.path[1]
+        file_path = sys.path[1]
         print(file_path + "/com/")
         os.chdir(file_path + "/com/")
         cf = configparser.ConfigParser()

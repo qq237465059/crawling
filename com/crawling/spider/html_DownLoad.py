@@ -7,6 +7,11 @@ HTML下载器
 from selenium import webdriver
 from com.crawling.utils.readFile import  ReadFile
 
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
+
+
 class HtmlDownLoad(object):
 
     def __init__(self):

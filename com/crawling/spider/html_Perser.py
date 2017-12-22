@@ -6,6 +6,9 @@ Html解析器
 import re
 from bs4 import BeautifulSoup
 from com.crawling.spider.html_DownLoad import HtmlDownLoad
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 class HtmlPerser(object):

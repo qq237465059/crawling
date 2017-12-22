@@ -4,6 +4,10 @@ URL管理器
 操作URL的传递
 @author: HY
 """
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 
 class UrlManage(object):
     # 在构造函数中初始化URL存储器

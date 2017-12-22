@@ -7,6 +7,10 @@ from com.crawling.spider import url_Manage
 from com.crawling.spider import html_DownLoad
 from com.crawling.spider import html_Perser
 from com.crawling.spider import html_Output
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 
 class SpiderMain(object):
     def __init__(self):

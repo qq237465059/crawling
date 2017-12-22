@@ -4,6 +4,10 @@ Html输出器
 输出爬取到的数据
 @author: HY
 """
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 
 class HtmlOutPut(object):
     def __init__(self):

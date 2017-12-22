@@ -1,5 +1,10 @@
 # -*- coding: UTF-8 -*-
 
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
+
+
 class Book:
     """ 书信息 """
 

@@ -1,6 +1,10 @@
 # -*- coding: UTF-8 -*-
 
 from com.crawling.config.readConfig import ReadConfig
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 
 class BaseMongo:
     def __init__(self):
