@@ -54,15 +54,12 @@ class RunSpider:
                         book_html_content = self.download.DownLoad(new_book_url)
                         # todo 获取书名并在数据库中匹配并获取书籍ID
                         bookName = self.parser.getBookName(book_html_content)
-                        bookId = int(self.db.sqlQuery("select id from book_info where bookName = '%s' " % (bookName))[0][0])
+                        bookId = int(self.db.sqlQuery("select id from book_info where bookName='%s' order by id desc limit 1 " % (bookName))[0][0])
                         # 获取第一章
                         one_url = self.parser.getBookOneUrl(book_html_content)
                         one_url = root_url + one_url
                         # 获取最后一章
                         chapter_url = self.db.sqlQuery("select url from book_article where bookId = %d" % bookId)
-                        print("-----------------------------------------------------")
-                        print(chapter_url)
-                        print("-----------------------------------------------------")
                         if len(chapter_url) > 0:
                             one_url = chapter_url[0][0]
                         # 拿到页面数据
