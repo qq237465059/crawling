@@ -90,6 +90,7 @@ class RunSpider:
                 nextBtn.click()
                 # time.sleep(1)
                 print(driver.title)
+                one_html_content = driver.page_source
         except Exception as e:
             return
         return
