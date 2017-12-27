@@ -75,23 +75,22 @@ class RunSpider:
         self.download.closeBrowser()
 
     def getBookByOne(self, one_html_content, bookId):
-        # 获取 “下一章” 按钮
-        driver = self.download.getBrowser()
-        print("当前链接为：" + driver.current_url)
         try:
-            nextBtn = driver.find_element("link text", "下一章")
+            while 1:
+                # 获取 “下一章” 按钮
+                driver = self.download.getBrowser()
+                print("当前链接为：" + driver.current_url)
+                nextBtn = driver.find_element("link text", "下一章")
+                # 解析网页
+                chapter = self.parser.addBookByContent(one_html_content)
+                if chapter is not None:
+                    chapter["bookId"] = int(bookId)
+                    chapter["url"] = driver.current_url
+                    self.db.insertByTable("book_article", chapter)
+                nextBtn.click()
+                # time.sleep(1)
+                print(driver.title)
         except Exception as e:
-            nextBtn = None
-        # 解析网页
-        chapter = self.parser.addBookByContent(one_html_content)
-        if chapter is not None:
-            chapter["bookId"] = int(bookId)
-            chapter["url"] = driver.current_url
-            self.db.insertByTable("book_article", chapter)
-        if nextBtn is not None:
-            nextBtn.click()
-            time.sleep(1)
-            print(driver.title)
-            self.getBookByOne(driver.page_source, bookId)
+            return
         return
 
