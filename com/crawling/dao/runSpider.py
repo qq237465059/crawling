@@ -60,6 +60,9 @@ class RunSpider:
                         one_url = root_url + one_url
                         # 获取最后一章
                         chapter_url = self.db.sqlQuery("select url from book_article where bookId = %d" % bookId)
+                        print("-----------------------------------------------------")
+                        print(chapter_url)
+                        print("-----------------------------------------------------")
                         if len(chapter_url) > 0:
                             one_url = chapter_url[0][0]
                         # 拿到页面数据
